@@ -303,6 +303,30 @@ local DIR=$MANIFEST_DIR/device/xiaomi;
    fi
 }
 
+clone_rosy_stuff() {
+   local rosy_device=$MANIFEST_DIR/device/xiaomi/rosy;
+   local rosy_kernel=$MANIFEST_DIR/kernel/xiaomi/rosy;
+   local atiga_clang=$MANIFEST_DIR/prebuilts/clang/host/linux-x86/clang-atiga;
+   local cryptfs=$MANIFEST_DIR/vendor/qcom/opensource/cryptfs_hw;
+   local gh_repo=https://github.com;
+
+   if [ ! -d $rosy_device ]; then
+      git clone $gh_repo/aepranata/orfox_device_xiaomi_rosy.git -b 12.1 --single-branch --depth=1 $rosy_device;
+   fi
+
+   if [ ! -d $rosy_kernel ]; then
+      git clone $gh_repo/aepranata/kernel_xiaomi_rosy.git -b 12 --single-branch --depth=1 $rosy_kernel;
+   fi
+
+   if [ ! -d $cryptfs ]; then
+      git clone $gh_repo/Atiga-Stuff/vendor_qcom_opensource_cryptfs_hw.git -b lineage-19.1 --single-branch --depth=1 $cryptfs;
+   fi
+
+   if [ ! -d $atiga_clang ]; then
+     git clone https://gitlab.com/aepranata/atiga-clang.git -b 13.x --single-branch --depth=1 $atiga_clang;
+   fi
+}
+
 # test build
 test_build() {
    # clone the device tree
@@ -360,6 +384,8 @@ WorkNow() {
     clone_fox_recovery;
 
     clone_fox_vendor;
+
+    clone_rosy_stuff;
 
     # test_build; # comment this out - don't do a test build by default
 
